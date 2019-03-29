@@ -30,13 +30,15 @@ app.post('/register', function (req, res) {
         res.json({ uid: output.user.uid , email: output.user.email });
     }).catch(error => {
         var errorCode = error.code;
-        var errorMessage = error.message;
+        var errorMessage = error.errorMessage;
         if (errorCode == "auth/email-already-in-use") {
-            res.send("อีเมลซ้ำในระบบ");
+            res.json({ errorMessage:  "อีเมลซ้ำในระบบ"});
         } else if (errorCode == "auth/invalid-email") {
-            res.send("รูปแบบอีเมลไม่ถูกต้อง");
+            res.json({ errorMessage:  "รูปแบบอีเมลไม่ถูกต้อง"});
+        } else if (errorCode == "auth/weak-password") {
+            res.json({ errorMessage:  "กรุณากรอกรหัสผ่านมากกว่า 6 ตำแหน่ง"});
         } else {
-            console.error(error);
+            res.json({ errorMessage:  errorMessage});
         }
     });
 
